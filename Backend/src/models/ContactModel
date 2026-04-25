@@ -1,0 +1,71 @@
+const mongoose = require("mongoose");
+
+const contactSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    lowercase: true,
+    trim: true
+  },
+  relation: {
+    type: String,
+    enum: [
+      "Friend",
+      "Best Friend",
+      "Family",
+      "Parent",
+      "Sibling",
+      "Spouse",
+      "Colleague",
+      "Manager",
+      "Boss",
+      "Client",
+      "Customer",
+      "Mentor",
+      "HR",
+      "Teacher",
+      "Professor",
+      "Classmate",
+      "Support",
+      "Vendor",
+      "Service Provider",
+      "Other"
+    ],
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+}, { _id: true }); // keeps _id for each contact
+
+
+const contactsSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // 👈 foreign key reference
+    required: true,
+    unique: true // ensures 1 document per user
+  },
+  contacts: {
+    type: [contactSchema],
+    validate: [
+      {
+        validator: function (val) {
+          return val.length <= 20;
+        },
+        message: "Maximum 20 contacts allowed"
+      }
+    ]
+  }
+}, {
+  timestamps: true // adds createdAt & updatedAt automatically
+});
+
+
+module.exports = mongoose.model("Contacts", contactsSchema);
