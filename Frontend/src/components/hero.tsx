@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, CircleCheck as CheckCircle2, TrendingUp, Clock } from 'lucide-react';
 import { EmailPreview } from './email-preview';
+import { Link } from 'react-router-dom';
 
 const stats = [
   { icon: Clock, value: '4.2hrs', label: 'saved daily', color: 'text-brand' },
@@ -86,16 +87,18 @@ export function Hero() {
 
             <div className="flex flex-wrap items-center gap-3 mb-10">
               <motion.a
-                href="#"
+                href="/chat"
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-semibold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-brand/25 hover:shadow-brand/40 text-sm"
               >
                 Start for Free
                 <ArrowRight className="h-4 w-4" />
+                <Link to="/chat"></Link>
               </motion.a>
               <motion.a
-                href="#"
+                href="https://www.youtube.com/"
+                target='_blank'
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-2 bg-background-secondary hover:bg-background-secondary/80 text-content-main font-semibold px-6 py-3.5 rounded-xl border border-border-subtle transition-all text-sm"

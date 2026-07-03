@@ -146,10 +146,10 @@ export function SocialProof() {
             Set up in 5 minutes. No credit card required. Full access for 14 days free.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <a href="#" className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-semibold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-brand/25 text-sm">
+            <a href="/chat" className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-semibold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-brand/25 text-sm">
               Start your free trial
             </a>
-            <a href="#" className="text-sm font-medium text-content-main/60 hover:text-content-main transition-colors">
+            <a href="/pricing" className="text-sm font-medium text-content-main/60 hover:text-content-main transition-colors">
               View pricing →
             </a>
           </div>

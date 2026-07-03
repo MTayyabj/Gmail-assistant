@@ -1,5 +1,5 @@
 import { Navbar } from '../components/navbar';
-import { Contacts } from '../components/contacts';
+import { Contacts } from '../components/Contacts';
 import { Footer } from '../components/footer';
 
 export const metadata = {

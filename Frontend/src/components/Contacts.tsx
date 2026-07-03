@@ -449,6 +449,8 @@ const { backendUrl, userData } = useContext(AppContent);
 
   // 3. Delete Contact (Using contactId now)
   const handleDeleteContact = async (contactId: string) => {
+    setFormError('');
+
     try {
       const response = await axios.post(`${backendUrl}api/contact/delete`, { contactId });
 
@@ -456,9 +458,11 @@ const { backendUrl, userData } = useContext(AppContent);
         setContacts(prev => prev.filter(c => c._id !== contactId));
         setSuccessMessage('Contact deleted');
         setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        setFormError(response.data.message || 'Unable to delete contact.');
       }
-    } catch (error) {
-      console.error("Delete error");
+    } catch (error: any) {
+      setFormError(error.response?.data?.message || 'Server error occurred.');
     }
   };
 
@@ -632,7 +636,7 @@ const { backendUrl, userData } = useContext(AppContent);
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => handleDeleteContact(contact.email)}
+                          onClick={() => handleDeleteContact(contact._id)}
                           className="text-red-500 hover:bg-red-500/10 p-2 rounded-lg transition-all"
                         >
                           <Trash2 className="h-4 w-4" />

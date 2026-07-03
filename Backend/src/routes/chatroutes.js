@@ -1,6 +1,6 @@
 import express from "express";
 import axios from "axios";
-import { getMessage, handleChatMessage } from "../controllers/MsgControllers.js"
+import { getMessage } from "../controllers/MsgControllers.js"
 import userAuth from '../middlewares/UserAuth.js'
 
 // import { sendMessage } from "../controllers/MsgControllers.js";
@@ -52,7 +52,7 @@ const router = express.Router();
 
 // router.post("/chat" , getMessage ,sendToN8n, saveMessage)
 // router.post("/1" , userAuth, handleChatMessage )
-router.post("/hello",userAuth, getMessage)
+router.post("/chat", userAuth, getMessage)
 
 
 /*CREATE CHAT*/

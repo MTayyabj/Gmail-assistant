@@ -1,20 +1,46 @@
 import axios from "axios";
-import Chat from "../models/ChatModel.js"
 
 /**
  * Helper: Communicates with n8n Webhook
  */
-const sendToN8n = async (message) => {
+const sendToN8n = async ({ message, userId }) => {
   try {
     const response = await axios.post("http://localhost:5678/webhook-test/chat", {
-      message: message
+      message,
+      userId,
     });
-    // Assuming n8n returns the text in response.data.output or response.data
-    return response.data; 
+
+    return response.data;
   } catch (error) {
     console.error("n8n communication failed:", error.message);
     throw new Error("AI Service currently unavailable");
   }
+};
+
+const formatN8nReply = (n8nResponse) => {
+  if (typeof n8nResponse === "string") {
+    if (n8nResponse.toLowerCase().includes("workflow started")) {
+      return "Your request has been sent successfully. The workflow has started.";
+    }
+
+    return n8nResponse;
+  }
+
+  const candidate =
+    n8nResponse?.reply ||
+    n8nResponse?.message ||
+    n8nResponse?.output ||
+    n8nResponse?.status;
+
+  if (typeof candidate === "string") {
+    if (candidate.toLowerCase().includes("workflow started")) {
+      return "Your request has been sent successfully. The workflow has started.";
+    }
+
+    return candidate;
+  }
+
+  return "Your request has been sent successfully.";
 };
 
 
@@ -24,14 +50,26 @@ export const getMessage = async (req, res) => {
 
     const { message , userId } = req.body;
 
-    console.log("Message from frontend:", message);
+    console.log("Message from frontend:", { userId, message });
 
-    // SEND MESSAGE TO N8N
-    const reply = await sendToN8n(message);
+    if (!message?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Message is required",
+      });
+    }
+
+    const n8nResponse = await sendToN8n({
+      message: message.trim(),
+      userId,
+    });
+
+    const reply = formatN8nReply(n8nResponse);
 
     res.json({
       success: true,
-      reply: reply
+      reply,
+      n8nResponse,
     });
 
   } catch (error) {
@@ -122,63 +160,3 @@ export const getMessage = async (req, res) => {
  
 //   }
 // };
-// import axios from 'axios';
-// import Chat from '../models/ChatModel'; // Ensure correct path to your model
-// import Chat from "../models/ChatModel.js"
-
-
-
-
-/**
- * Main Controller: Handles the chat lifecycle
- */
-export const handleChatMessage = async (req, res) => {
-  try {
-    const { message } = req.body;
-    console.log(message)
-    if (!message) {
-      return res.status(400).json({ success: false, message: "Missing or message" });
-    }
-
-    // 1. Find the chat session
-    // const chat = await Chat.findById(chatId);
-    // if (!chat) {
-    //   return res.status(404).json({ success: false, message: "Chat session not found" });
-    // }
-
-    // 2. Save User Message to Database
-    chat.messages.push({
-      content: message,
-      sender: "user",
-      timestamp: new Date()
-    });
-
-    // 3. Get AI Reply from n8n
-    const aiReply = await sendToN8n(message);
-
-    // 4. Save AI/Agent Message to Database
-    chat.messages.push({
-      content: aiReply,
-      sender: "agent",
-      timestamp: new Date()
-    });
-
-    // Increment count and save the document
-    chat.messageCount = chat.messages.length;
-    await chat.save();
-
-    // 5. Send response back to Frontend
-    return res.status(200).json({
-      success: true,
-      reply: aiReply,
-      chatId: chat._id
-    });
-
-  } catch (error) {
-    console.error("Chat Controller Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Internal Server Error"
-    });
-  }
-};

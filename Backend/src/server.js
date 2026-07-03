@@ -45,8 +45,8 @@ app.use(cors({
 app.get('/',(req,res)=> res.send("API is working wo hooo."));
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
-// app.use("/api", chatRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api", chatRoutes);
+// app.use("/api/chat", chatRoutes);
 app.use("/api/contact", contactRoutes);
 
 

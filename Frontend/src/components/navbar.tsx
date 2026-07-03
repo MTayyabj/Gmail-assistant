@@ -1,18 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Zap, Menu, X } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { Link } from 'react-router-dom';
+import { AppContent } from '../Context/AppContext';
+
 const navLinks = [
-  { label: 'Features', href: '#features' },
+  { label: 'Features', href: '/#features' },
   { label: 'Pricing', href: '/pricing' },
-  { label: 'Documentation', href: '#docs' },
+  // { label: 'Documentation', href: '#docs' },
 ];
 
 export function Navbar() {
+  const { isLoggedin } = useContext(AppContent);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const primaryHref = isLoggedin ? '/chat' : '/login';
+  const primaryLabel = isLoggedin ? 'Open Chat' : 'Sign Up';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -53,12 +58,13 @@ export function Navbar() {
 
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            {/* <a
+             <a
               href="/profile"
               className="text-sm font-medium text-content-main/70 hover:text-content-main transition-colors px-3 py-2"
             >
               Profile
             </a>
+            {/*
             <a
               href="/contacts"
               className="text-sm font-medium text-content-main/70 hover:text-content-main transition-colors px-3 py-2"
@@ -66,10 +72,10 @@ export function Navbar() {
               Contacts
             </a> */}
             <a
-              href="/chat"
+              href={primaryHref}
               className="inline-flex items-center gap-1.5 bg-brand hover:bg-brand-hover text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-md shadow-brand/25 hover:shadow-brand/40 hover:-translate-y-px"
             >
-              Get Started
+              {primaryLabel}
             </a>
           </div>
 
@@ -114,8 +120,12 @@ export function Navbar() {
               >
                 Contacts
               </a> */}
-              <a href="#" className="text-center bg-brand hover:bg-brand-hover text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all">
-                Get Started
+              <a
+                href={primaryHref}
+                onClick={() => setMobileOpen(false)}
+                className="text-center bg-brand hover:bg-brand-hover text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
+              >
+                {primaryLabel}
               </a>
             </div>
           </div>

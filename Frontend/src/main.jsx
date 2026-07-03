@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { ThemeProvider } from './components/theme-toggle.js'
 import {AppContextProvider} from './Context/AppContext.jsx'
 import { BrowserRouter } from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.css'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>

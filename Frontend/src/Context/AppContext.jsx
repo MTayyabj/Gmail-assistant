@@ -17,6 +17,7 @@ axios.defaults.withCredentials = true;
   const backendUrl = "http://localhost:5000/";
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   //Checking Authentication
   const getAuthState= async () => {
@@ -27,12 +28,14 @@ axios.defaults.withCredentials = true;
       
       if (data.success) {
         setIsLoggedin(true); //setusesate true
-        getUserData(); //[FUNCTION]//Immediately fetches user data
+        await getUserData(); //[FUNCTION]//Immediately fetches user data
       }
     
     }
     catch(error){
       toast.error(error.message)
+    } finally {
+      setAuthLoading(false);
     }
   }
 
@@ -66,6 +69,7 @@ axios.defaults.withCredentials = true;
     backendUrl,
     isLoggedin, setIsLoggedin,
     userData, setUserData,
+    authLoading,
     getUserData,
   };
 
